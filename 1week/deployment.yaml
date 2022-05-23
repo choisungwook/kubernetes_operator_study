@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: week1-deployment-demo
+  namespace: default
+  labels:
+    app: week1-deployment-demo
+spec:
+  selector:
+    matchLabels:
+      app: week1-deployment-demo
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: week1-deployment-demo
+    spec:
+      containers:
+      - name: main
+        image: nginx:1.21
+        resources:
+          requests:
+            cpu: 100m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
+        ports:
+        - containerPort:  80
+          name: http
