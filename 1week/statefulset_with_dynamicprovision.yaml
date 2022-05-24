@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: week1-sts
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: week1-sts
+  serviceName: "week1-sts"
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: week1-sts
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: main
+        image: nginx:1.21
+        ports:
+        - containerPort: 80
+          name: web
+        volumeMounts:
+        - name: www
+          mountPath: /tmp
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "nfs-client"
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: week1-sts
+  labels:
+    app: week1-sts
+spec:
+  ports:
+  - port: 80
+    name: web
+  clusterIP: None
+  selector:
+    app: week1-sts
