@@ -52,7 +52,7 @@ spec:
   selector:
     matchLabels:
       app: week1-sts
-  serviceName: "week1-sts-demo"
+  serviceName: "week1-sts"
   replicas: 3
   template:
     metadata:
@@ -78,3 +78,17 @@ spec:
       resources:
         requests:
           storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: week1-sts
+  labels:
+    app: week1-sts
+spec:
+  ports:
+  - port: 80
+    name: web
+  clusterIP: None
+  selector:
+    app: week1-sts
